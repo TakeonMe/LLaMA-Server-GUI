@@ -6,5 +6,5 @@ Interfaz gráfica en GTK para gestionar servidores LLaMA en Linux, con soporte p
 Aquí puedes ver cómo se ve la interfaz de LLaMA Server GUI al iniciarla:
 
 <div align="center">
-  <img src="assets/screenshot.png" alt="Captura de pantalla de LLaMA Server GUI">
+  <img src="assets/screenshot.gif" alt="Captura de pantalla de LLaMA Server GUI">
 </div>
