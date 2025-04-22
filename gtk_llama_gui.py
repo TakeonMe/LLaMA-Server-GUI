@@ -30,10 +30,10 @@ def find_models(models_dir):
     logger.info(f"Found {len(models)} GGUF models in {models_dir}")
     return models
 
-def save_config(models_dir, bin_base, ngl, port, prompt, temp, top_k, top_p, repeat_penalty, threads):
+def save_config(models_dir, bin_base, ngl, port, prompt, temp, top_k, top_p, repeat_penalty, threads, ctx_size):
     try:
         with open(CONFIG_FILE, "w") as f:
-            f.write(f"{models_dir}\n{bin_base}\n{ngl}\n{port}\n{prompt}\n{temp}\n{top_k}\n{top_p}\n{repeat_penalty}\n{threads}")
+            f.write(f"{models_dir}\n{bin_base}\n{ngl}\n{port}\n{prompt}\n{temp}\n{top_k}\n{top_p}\n{repeat_penalty}\n{threads}\n{ctx_size}")
         logger.info(f"Configuration saved to {CONFIG_FILE}")
     except Exception as e:
         logger.error(f"Failed to save configuration to {CONFIG_FILE}: {e}")
@@ -43,16 +43,17 @@ def load_config():
         try:
             with open(CONFIG_FILE, "r") as f:
                 lines = f.readlines()
-                if len(lines) >= 10:
+                if len(lines) >= 11:
                     logger.info(f"Loaded configuration from {CONFIG_FILE}")
-                    return [line.strip() for line in lines[:10]]
+                    return [line.strip() for line in lines[:11]]
                 else:
                     logger.warning(f"Configuration file {CONFIG_FILE} is incomplete")
         except Exception as e:
             logger.error(f"Failed to load configuration from {CONFIG_FILE}: {e}")
     default_threads = str(os.cpu_count() or 4)
+    default_ctx_size = "4096"  # Default context size
     logger.info("Using default configuration")
-    return None, None, None, None, "", "0.8", "40", "0.9", "1.1", default_threads
+    return None, None, None, None, "", "0.8", "40", "0.9", "1.1", default_threads, default_ctx_size
 
 def check_server_running(port):
     """Verifica si un proceso llama-server está corriendo en el puerto especificado."""
@@ -83,7 +84,7 @@ def kill_server(pid, window):
         show_error(window, f"No se pudo detener el servidor: {e}")
         return False
 
-def set_inputs_sensitive(sensitive, models_dir_entry, bin_dir_entry, model_choice, ngl_entry, port_entry, prompt_entry, temp_entry, top_k_entry, top_p_entry, repeat_penalty_entry, threads_entry):
+def set_inputs_sensitive(sensitive, models_dir_entry, bin_dir_entry, model_choice, ngl_entry, port_entry, prompt_entry, temp_entry, top_k_entry, top_p_entry, repeat_penalty_entry, threads_entry, ctx_size_entry):
     """Habilita o deshabilita los campos de entrada y el selector."""
     models_dir_entry.set_sensitive(sensitive)
     bin_dir_entry.set_sensitive(sensitive)
@@ -96,21 +97,22 @@ def set_inputs_sensitive(sensitive, models_dir_entry, bin_dir_entry, model_choic
     top_p_entry.set_sensitive(sensitive)
     repeat_penalty_entry.set_sensitive(sensitive)
     threads_entry.set_sensitive(sensitive)
+    ctx_size_entry.set_sensitive(sensitive)
     logger.debug(f"Input fields sensitivity set to {sensitive}")
 
-def run_server(model_path, ngl, port, bin_dir, button, window, model_choice, models_dir_entry, bin_dir_entry, status_label, prompt_entry, temp_entry, temp, top_k_entry, top_k, top_p_entry, top_p, repeat_penalty_entry, repeat_penalty, threads_entry, threads):
+def run_server(model_path, ngl, port, bin_dir, button, window, model_choice, models_dir_entry, bin_dir_entry, status_label, prompt_entry, temp_entry, temp, top_k_entry, top_k, top_p_entry, top_p, repeat_penalty_entry, repeat_penalty, threads_entry, threads, ctx_size_entry, ctx_size):
     global process, server_running
-    cmd = f"./llama-server -m '{model_path}' -ngl {ngl} --port {port} --temp {temp} --top-k {top_k} --top-p {top_p} --repeat-penalty {repeat_penalty} --threads {threads}"
+    cmd = f"./llama-server -m '{model_path}' -ngl {ngl} --port {port} --temp {temp} --top-k {top_k} --top-p {top_p} --repeat-penalty {repeat_penalty} --threads {threads} -c {ctx_size}"
     logger.info(f"Starting server with command: {cmd}")
     try:
         process = subprocess.Popen(cmd, shell=True, cwd=bin_dir, preexec_fn=os.setsid)
         button.set_label("Detener Servidor")
         button.add_css_class("destructive-action")
         server_running = True
-        set_inputs_sensitive(False, models_dir_entry, bin_dir_entry, model_choice, ngl_entry, port_entry, prompt_entry, temp_entry, top_k_entry, top_p_entry, repeat_penalty_entry, threads_entry)
+        set_inputs_sensitive(False, models_dir_entry, bin_dir_entry, model_choice, ngl_entry, port_entry, prompt_entry, temp_entry, top_k_entry, top_p_entry, repeat_penalty_entry, threads_entry, ctx_size_entry)
 
         model_name = os.path.basename(model_path)
-        status_label.set_markup(f'El modelo <b>{model_name}</b> está corriendo en el puerto <b>{port}</b> y puedes acceder haciendo click <a href="http://localhost:{port}/">aquí</a>.')
+        status_label.set_markup(f'El modelo <b>{model_name}</b> está corriendo en el puerto <b>{port}</b> y puedes acceder haciendo click <a href="http://localhost:{port}/">aquí</a>.\n\n<b>Nota</b>: Si no arranca el servidor inicia la aplicación desde la terminal para ver los mensajes del servidor.')
         status_label.set_selectable(True)
         status_label.queue_draw()
 
@@ -122,12 +124,13 @@ def run_server(model_path, ngl, port, bin_dir, button, window, model_choice, mod
         top_p = top_p_entry.get_text()
         repeat_penalty = repeat_penalty_entry.get_text()
         threads = threads_entry.get_text()
-        save_config(models_dir, bin_base, ngl, port, prompt, temp, top_k, top_p, repeat_penalty, threads)
+        ctx_size = ctx_size_entry.get_text()
+        save_config(models_dir, bin_base, ngl, port, prompt, temp, top_k, top_p, repeat_penalty, threads, ctx_size)
     except Exception as e:
         logger.error(f"Failed to start server: {e}")
         show_error(window, f"No se pudo iniciar el servidor: {e}")
 
-def stop_server(button, window, model_choice, models_dir_entry, bin_dir_entry, status_label, prompt_entry, temp_entry, top_k_entry, top_p_entry, repeat_penalty_entry, threads_entry):
+def stop_server(button, window, model_choice, models_dir_entry, bin_dir_entry, status_label, prompt_entry, temp_entry, top_k_entry, top_p_entry, repeat_penalty_entry, threads_entry, ctx_size_entry):
     global process, server_running
     if process:
         logger.info("Stopping server")
@@ -136,11 +139,11 @@ def stop_server(button, window, model_choice, models_dir_entry, bin_dir_entry, s
     button.set_label("Iniciar Servidor")
     button.remove_css_class("destructive-action")  # Eliminar clase destructive-action
     button.add_css_class("suggested-action")      # Restaurar clase suggested-action
-    status_label.set_text("Indica las rutas, selecciona el modelo, indica el puerto, el prompt, el número de capas de GPU, el número de hilos, la calidez, top-k, top-p y la penalización de repetición.")
+    status_label.set_text("Indica las rutas, selecciona el modelo, indica el puerto, el prompt, el número de capas de GPU, el número de hilos, el tamaño del contexto, la calidez, top-k, top-p y la penalización de repetición.")
     status_label.set_selectable(False)
     status_label.queue_draw()
     server_running = False
-    set_inputs_sensitive(True, models_dir_entry, bin_dir_entry, model_choice, ngl_entry, port_entry, prompt_entry, temp_entry, top_k_entry, top_p_entry, repeat_penalty_entry, threads_entry)
+    set_inputs_sensitive(True, models_dir_entry, bin_dir_entry, model_choice, ngl_entry, port_entry, prompt_entry, temp_entry, top_k_entry, top_p_entry, repeat_penalty_entry, threads_entry, ctx_size_entry)
     logger.info("Server stopped and UI reset")
 
 def show_info_dialog(window):
@@ -179,10 +182,10 @@ def show_info_dialog(window):
         logger.error(f"Failed to read info file assets/info.json: {str(e)}")
         show_error(window, f"Error al leer el archivo assets/info.json: {str(e)}")
 
-def run_server_wrapper(button, window, model_choice, models_dir_entry, bin_dir_entry, status_label, prompt_entry, temp_entry, top_k_entry, top_p_entry, repeat_penalty_entry, threads_entry):
+def run_server_wrapper(button, window, model_choice, models_dir_entry, bin_dir_entry, status_label, prompt_entry, temp_entry, top_k_entry, top_p_entry, repeat_penalty_entry, threads_entry, ctx_size_entry):
     global server_running
     if server_running:
-        stop_server(button, window, model_choice, models_dir_entry, bin_dir_entry, status_label, prompt_entry, temp_entry, top_k_entry, top_p_entry, repeat_penalty_entry, threads_entry)
+        stop_server(button, window, model_choice, models_dir_entry, bin_dir_entry, status_label, prompt_entry, temp_entry, top_k_entry, top_p_entry, repeat_penalty_entry, threads_entry, ctx_size_entry)
     else:
         models_dir = models_dir_entry.get_text()
         bin_base = bin_dir_entry.get_text()
@@ -194,6 +197,7 @@ def run_server_wrapper(button, window, model_choice, models_dir_entry, bin_dir_e
         top_p = top_p_entry.get_text()
         repeat_penalty = repeat_penalty_entry.get_text()
         threads = threads_entry.get_text()
+        ctx_size = ctx_size_entry.get_text()
 
         if not models_dir:
             logger.error("Models directory path is required")
@@ -234,6 +238,10 @@ def run_server_wrapper(button, window, model_choice, models_dir_entry, bin_dir_e
         if not threads:
             logger.error("Number of threads is required")
             show_error(window, "El número de hilos es obligatorio.")
+            return
+        if not ctx_size:
+            logger.error("Context size is required")
+            show_error(window, "El tamaño del contexto es obligatorio.")
             return
 
         try:
@@ -292,6 +300,17 @@ def run_server_wrapper(button, window, model_choice, models_dir_entry, bin_dir_e
             show_error(window, "El número de hilos debe ser un número entero válido (ej. 4).")
             return
 
+        try:
+            int(ctx_size)
+            if int(ctx_size) < 512 or int(ctx_size) > 32768:
+                logger.error("Context size must be between 512 and 32768")
+                show_error(window, "El tamaño del contexto debe estar entre 512 y 32768.")
+                return
+        except ValueError:
+            logger.error("Context size must be a valid integer")
+            show_error(window, "El tamaño del contexto debe ser un número entero válido (ej. 4096).")
+            return
+
         existing_pid = check_server_running(port)
         if existing_pid:
             logger.warning(f"Server already running on port {port} with PID {existing_pid}")
@@ -322,7 +341,7 @@ def run_server_wrapper(button, window, model_choice, models_dir_entry, bin_dir_e
                             logger.error(f"Directory {bin_dir} does not exist")
                             show_error(window, f"La ruta {bin_dir} no existe.")
                             return
-                        run_server(model_path, ngl, port, bin_dir, button, window, model_choice, models_dir_entry, bin_dir_entry, status_label, prompt_entry, temp_entry, temp, top_k_entry, top_k, top_p_entry, top_p, repeat_penalty_entry, repeat_penalty, threads_entry, threads)
+                        run_server(model_path, ngl, port, bin_dir, button, window, model_choice, models_dir_entry, bin_dir_entry, status_label, prompt_entry, temp_entry, temp, top_k_entry, top_k, top_p_entry, top_p, repeat_penalty_entry, repeat_penalty, threads_entry, threads, ctx_size_entry, ctx_size)
                 elif response_id == Gtk.ResponseType.NO:
                     kill_server(existing_pid, window)
 
@@ -343,7 +362,7 @@ def run_server_wrapper(button, window, model_choice, models_dir_entry, bin_dir_e
             show_error(window, f"La ruta {bin_dir} no existe.")
             return
 
-        run_server(model_path, ngl, port, bin_dir, button, window, model_choice, models_dir_entry, bin_dir_entry, status_label, prompt_entry, temp_entry, temp, top_k_entry, top_k, top_p_entry, top_p, repeat_penalty_entry, repeat_penalty, threads_entry, threads)
+        run_server(model_path, ngl, port, bin_dir, button, window, model_choice, models_dir_entry, bin_dir_entry, status_label, prompt_entry, temp_entry, temp, top_k_entry, top_k, top_p_entry, top_p, repeat_penalty_entry, repeat_penalty, threads_entry, threads, ctx_size_entry, ctx_size)
 
 def show_error(window, message):
     dialog = Gtk.MessageDialog(
@@ -365,9 +384,9 @@ def on_link_clicked(label, uri):
         logger.error(f"Failed to open link {uri}: {e}")
         return False
 
-def on_window_destroy(window, button, model_choice, models_dir_entry, bin_dir_entry, status_label, prompt_entry, temp_entry, top_k_entry, top_p_entry, repeat_penalty_entry, threads_entry):
+def on_window_destroy(window, button, model_choice, models_dir_entry, bin_dir_entry, status_label, prompt_entry, temp_entry, top_k_entry, top_p_entry, repeat_penalty_entry, threads_entry, ctx_size_entry):
     logger.info("Window destroyed, stopping server")
-    stop_server(button, window, model_choice, models_dir_entry, bin_dir_entry, status_label, prompt_entry, temp_entry, top_k_entry, top_p_entry, repeat_penalty_entry, threads_entry)
+    stop_server(button, window, model_choice, models_dir_entry, bin_dir_entry, status_label, prompt_entry, temp_entry, top_k_entry, top_p_entry, repeat_penalty_entry, threads_entry, ctx_size_entry)
 
 def update_model_list(entry, model_choice):
     models_dir = entry.get_text()
@@ -396,13 +415,13 @@ def on_activate(app):
     box.set_margin_start(10)
     box.set_margin_end(10)
 
-    global models_dir_entry, bin_dir_entry, model_choice, ngl_entry, port_entry, prompt_entry, temp_entry, top_k_entry, top_p_entry, repeat_penalty_entry, threads_entry
+    global models_dir_entry, bin_dir_entry, model_choice, ngl_entry, port_entry, prompt_entry, temp_entry, top_k_entry, top_p_entry, repeat_penalty_entry, threads_entry, ctx_size_entry
     models_dir_entry = Gtk.Entry()
     models_dir_entry.set_placeholder_text("Ruta a modelos GGUF (ej. /media/user/models)")
     bin_dir_entry = Gtk.Entry()
     bin_dir_entry.set_placeholder_text("Ruta base a llama.cpp (ej. /media/user/llama.cpp)")
 
-    saved_models_dir, saved_bin_base, saved_ngl, saved_port, saved_prompt, saved_temp, saved_top_k, saved_top_p, saved_repeat_penalty, saved_threads = load_config()
+    saved_models_dir, saved_bin_base, saved_ngl, saved_port, saved_prompt, saved_temp, saved_top_k, saved_top_p, saved_repeat_penalty, saved_threads, saved_ctx_size = load_config()
     if saved_models_dir:
         models_dir_entry.set_text(saved_models_dir)
     if saved_bin_base:
@@ -439,6 +458,13 @@ def on_activate(app):
         threads_entry.set_text(saved_threads)
     else:
         threads_entry.set_text(str(os.cpu_count() or 4))
+
+    ctx_size_entry = Gtk.Entry()
+    ctx_size_entry.set_placeholder_text("Tamaño del contexto (ej. 4096)")
+    if saved_ctx_size:
+        ctx_size_entry.set_text(saved_ctx_size)
+    else:
+        ctx_size_entry.set_text("4096")
 
     temp_entry = Gtk.Entry()
     temp_entry.set_placeholder_text("Calidez/Temperatura (ej. 0.8)")
@@ -497,6 +523,10 @@ def on_activate(app):
     threads_label.set_xalign(0.0)
     threads_label.set_margin_bottom(2)
 
+    ctx_size_label = Gtk.Label(label="Tamaño del contexto (-c):")
+    ctx_size_label.set_xalign(0.0)
+    ctx_size_label.set_margin_bottom(2)
+
     temp_label = Gtk.Label(label="Calidez/Temperatura:")
     temp_label.set_xalign(0.0)
     temp_label.set_margin_bottom(2)
@@ -517,7 +547,7 @@ def on_activate(app):
     button.set_margin_top(10)
     button.set_margin_bottom(10)
     button.add_css_class("suggested-action")
-    button.connect("clicked", lambda b: run_server_wrapper(b, window, model_choice, models_dir_entry, bin_dir_entry, status_label, prompt_entry, temp_entry, top_k_entry, top_p_entry, repeat_penalty_entry, threads_entry))
+    button.connect("clicked", lambda b: run_server_wrapper(b, window, model_choice, models_dir_entry, bin_dir_entry, status_label, prompt_entry, temp_entry, top_k_entry, top_p_entry, repeat_penalty_entry, threads_entry, ctx_size_entry))
 
     info_button = Gtk.Button(label="Mostrar Información")
     info_button.set_margin_top(0)
@@ -525,7 +555,7 @@ def on_activate(app):
     info_button.add_css_class("accent")
     info_button.connect("clicked", lambda b: show_info_dialog(window))
 
-    status_label = Gtk.Label(label="Indica las rutas, selecciona el modelo, indica el puerto, el prompt, el número de capas de GPU, el número de hilos, la calidez, top-k, top-p y la penalización de repetición.")
+    status_label = Gtk.Label(label="Indica las rutas, selecciona el modelo, indica el puerto, el prompt, el número de capas de GPU, el número de hilos, el tamaño del contexto, la calidez, top-k, top-p y la penalización de repetición.")
     status_label.set_wrap(True)
     status_label.set_use_markup(True)
     status_label.connect("activate-link", on_link_clicked)
@@ -546,6 +576,8 @@ def on_activate(app):
     box.append(ngl_entry)
     box.append(threads_label)
     box.append(threads_entry)
+    box.append(ctx_size_label)
+    box.append(ctx_size_entry)
     box.append(temp_label)
     box.append(temp_entry)
     box.append(top_k_label)
@@ -563,7 +595,7 @@ def on_activate(app):
     box.set_margin_end(12)
 
     window.set_child(box)
-    window.connect("destroy", on_window_destroy, button, model_choice, models_dir_entry, bin_dir_entry, status_label, prompt_entry, temp_entry, top_k_entry, top_p_entry, repeat_penalty_entry, threads_entry)
+    window.connect("destroy", on_window_destroy, button, model_choice, models_dir_entry, bin_dir_entry, status_label, prompt_entry, temp_entry, top_k_entry, top_p_entry, repeat_penalty_entry, threads_entry, ctx_size_entry)
     window.set_visible(True)
 
 def main():
