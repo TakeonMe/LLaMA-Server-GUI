@@ -19,6 +19,10 @@
         "description": "Texto inicial que define el contexto o comportamiento del modelo.",
         "recommended": "Ejemplo: 'I always speak in Spanish' o un prompt específico para tu caso de uso."
     },
+    "Calidez/Temperatura": {
+        "description": "Controla la aleatoriedad de las respuestas del modelo. Valores bajos hacen respuestas más deterministas.",
+        "recommended": "0.8 para un balance entre creatividad y coherencia. Rango: 0.1 a 2.0."
+    },
     "Capas GPU (-ngl)": {
         "description": "Número de capas del modelo que se descargarán a la GPU para acelerar el procesamiento.",
         "recommended": "0 si no usas GPU, o un número según la VRAM disponible (ej. 32 para GPUs con 8GB VRAM)."
@@ -31,9 +35,9 @@
         "description": "Número máximo de tokens que el modelo puede procesar en una sola interacción (incluye prompt y respuesta).",
         "recommended": "4096 para un balance entre memoria y capacidad. Rango: 512 a 32768, dependiendo del modelo y hardware."
     },
-    "Calidez/Temperatura": {
-        "description": "Controla la aleatoriedad de las respuestas del modelo. Valores bajos hacen respuestas más deterministas.",
-        "recommended": "0.8 para un balance entre creatividad y coherencia. Rango: 0.1 a 2.0."
+    "Máximo de tokens": {
+        "description": "Número máximo de tokens que el modelo puede generar en una respuesta.",
+        "recommended": "512 para un balance entre longitud de respuesta y uso de recursos. Rango: 1 a 32768, dependiendo del modelo y hardware."
     },
     "Top-k": {
         "description": "Número de tokens más probables considerados en cada paso de generación.",
