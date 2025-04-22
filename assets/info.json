@@ -1,0 +1,46 @@
+{
+    "Ruta a modelos GGUF": {
+        "description": "Directorio donde se encuentran los modelos en formato GGUF para el servidor LLaMA.",
+        "recommended": "Ejemplo: /media/user/models. Asegúrate de que el directorio contenga archivos .gguf."
+    },
+    "Ruta base a llama.cpp": {
+        "description": "Directorio base del proyecto llama.cpp, donde se encuentra el ejecutable llama-server.",
+        "recommended": "Ejemplo: /media/user/llama.cpp. El ejecutable debe estar en <ruta>/build/bin/."
+    },
+    "Modelo": {
+        "description": "Selecciona el modelo GGUF a usar desde el directorio especificado.",
+        "recommended": "Elige un modelo compatible con tu hardware (ej. modelos cuantizados para menos uso de memoria)."
+    },
+    "Puerto": {
+        "description": "Puerto en el que el servidor LLaMA escuchará las conexiones.",
+        "recommended": "8080 o cualquier puerto libre entre 1024 y 65535."
+    },
+    "Prompt inicial": {
+        "description": "Texto inicial que define el contexto o comportamiento del modelo.",
+        "recommended": "Ejemplo: 'I always speak in Spanish' o un prompt específico para tu caso de uso."
+    },
+    "Capas GPU (-ngl)": {
+        "description": "Número de capas del modelo que se descargarán a la GPU para acelerar el procesamiento.",
+        "recommended": "0 si no usas GPU, o un número según la VRAM disponible (ej. 32 para GPUs con 8GB VRAM)."
+    },
+    "Número de hilos": {
+        "description": "Número de hilos de CPU utilizados para el procesamiento del modelo.",
+        "recommended": "Igual o menor al número de núcleos físicos de la CPU (ej. 4 para un procesador de 4 núcleos)."
+    },
+    "Calidez/Temperatura": {
+        "description": "Controla la aleatoriedad de las respuestas del modelo. Valores bajos hacen respuestas más deterministas.",
+        "recommended": "0.8 para un balance entre creatividad y coherencia. Rango: 0.1 a 2.0."
+    },
+    "Top-k": {
+        "description": "Número de tokens más probables considerados en cada paso de generación.",
+        "recommended": "40 para un buen balance. Rango: 1 a 100."
+    },
+    "Top-p": {
+        "description": "Probabilidad acumulada de tokens considerados (muestreo por núcleo).",
+        "recommended": "0.9 para respuestas coherentes. Rango: 0.0 a 1.0."
+    },
+    "Penalización de repetición": {
+        "description": "Penaliza la repetición de tokens para evitar respuestas redundantes.",
+        "recommended": "1.1 para evitar repeticiones sin afectar la calidad. Rango: 1.0 a 2.0."
+    }
+}
