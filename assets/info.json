@@ -27,6 +27,10 @@
         "description": "Número de hilos de CPU utilizados para el procesamiento del modelo.",
         "recommended": "Igual o menor al número de núcleos físicos de la CPU (ej. 4 para un procesador de 4 núcleos)."
     },
+    "Tamaño del contexto (-c)": {
+        "description": "Número máximo de tokens que el modelo puede procesar en una sola interacción (incluye prompt y respuesta).",
+        "recommended": "4096 para un balance entre memoria y capacidad. Rango: 512 a 32768, dependiendo del modelo y hardware."
+    },
     "Calidez/Temperatura": {
         "description": "Controla la aleatoriedad de las respuestas del modelo. Valores bajos hacen respuestas más deterministas.",
         "recommended": "0.8 para un balance entre creatividad y coherencia. Rango: 0.1 a 2.0."
