@@ -8,4 +8,4 @@ __pycache__/
 .vscode/
 
 # Ignorar archivos de configuración
-.llama-server-config.txt
+.llama-server-config.json
