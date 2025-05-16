@@ -1,0 +1,11 @@
+# Ignorar todos los archivos .env
+.env
+
+# Ignorar carpeta de caché
+__pycache__/
+
+# Ignorar archivos temporales de VSCode
+.vscode/
+
+# Ignorar archivos de configuración
+.llama-server-config.txt

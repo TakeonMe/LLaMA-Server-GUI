@@ -28,6 +28,7 @@ mssg_iniserv = "Completa los campos con los valores sugeridos por el modelo e in
 
 def find_models(models_dir):
     models = glob.glob(os.path.join(models_dir, "*.gguf"))
+    models.sort()
     logger.info(f"Found {len(models)} GGUF models in {models_dir}")
     return models
 
@@ -105,8 +106,51 @@ def set_inputs_sensitive(sensitive, models_dir_entry, bin_dir_entry, model_choic
 
 def run_server(model_path, ngl, port, bin_dir, button, window, model_choice, models_dir_entry, bin_dir_entry, status_label, prompt_entry, temp_entry, temp, top_k_entry, top_k, top_p_entry, top_p, repeat_penalty_entry, repeat_penalty, threads_entry, threads, ctx_size_entry, ctx_size, max_tokens_entry, max_tokens):
     global process, server_running
-    cmd = f"./llama-server -m '{model_path}' -ngl {ngl} --port {port} --temp {temp} --top-k {top_k} --top-p {top_p} --repeat-penalty {repeat_penalty} --threads {threads} -c {ctx_size} --n-predict {max_tokens}"  # Añadido --n-predict
+
+    cmd = (
+        f"./llama-server --model '{model_path}' "
+        f"--n-gpu-layers {ngl} "  # 40 es óptimo para 32B en 24GB VRAM
+        f"--host 0.0.0.0 --port {port} "
+        f"--temp {temp} --top-k {top_k} --top-p {top_p} "
+        f"--repeat-penalty {repeat_penalty} --threads {threads} "
+        f"--ctx-size {ctx_size} --n-predict {max_tokens} "
+        "--mlock --cont-batching "
+        "--rope-freq-base 20000 "  # Mejor para contextos largos
+        f"--flash-attn "  # Reduce el uso de memoria en caché KV
+    )
+
     logger.info(f"Starting server with command: {cmd}")
+
+    # Verificar tamaño del contexto
+    try:
+        ctx_size = int(ctx_size)
+        if ctx_size > 32768:  # Límite máximo del servidor
+            show_error(window, "El tamaño del contexto no puede ser mayor a 32768.")
+            return
+
+        # Verificar si el contexto actual supera el límite
+        prompt = prompt_entry.get_text()
+        if prompt:
+            prompt_length = len(prompt)
+            if prompt_length > ctx_size:
+                # Cortar el prompt para que quepa en el contexto
+                prompt = prompt[:ctx_size]
+                prompt_entry.set_text(prompt)
+
+                dialog = Gtk.MessageDialog(
+                    transient_for=window,
+                    message_type=Gtk.MessageType.WARNING,
+                    buttons=Gtk.ButtonsType.OK,
+                    text="Advertencia de Contexto",
+                    secondary_text=f"El prompt inicial era demasiado largo para el contexto de tamaño {ctx_size}.\n\nEl prompt ha sido automáticamente truncado para que quepa dentro del contexto."
+                )
+                dialog.connect("response", lambda d, r: d.destroy())
+                dialog.present()
+    except ValueError:
+        logger.error("Invalid context size value")
+        show_error(window, "El tamaño del contexto debe ser un número válido.")
+        return
+
     try:
         process = subprocess.Popen(cmd, shell=True, cwd=bin_dir, preexec_fn=os.setsid)
         button.set_label("Detener Servidor")
@@ -156,7 +200,7 @@ def show_info_dialog(window):
     try:
         with open(info_path, "r") as f:
             info_data = json.load(f)
-        
+
         message = ""
         for key, value in info_data.items():
             message += f"{key.upper()}:\n"

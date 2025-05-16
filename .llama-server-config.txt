@@ -1,0 +1,12 @@
+/media/pedro/SSD Gray/ModelosAi
+/media/pedro/SSD Gray/ModelosAi/llama.cpp
+55
+8080
+Responde siempre en español. Be brief in your explanations and try to go directly to the code when necessary. Function names should be in English, but comments should be in Spanish.
+0.4
+40
+0.9
+1.1
+20
+12000
+12000
