@@ -3,7 +3,7 @@ import os
 from gi.repository import Gtk, Gdk
 from core.config import load_config, save_config
 from core.utils import find_models
-from gui.model_selector import update_model_list
+from gui.model_selector import update_model_list, get_selected_model_path
 from gui.dialogs import show_error, show_info_dialog
 import logging
 
@@ -228,28 +228,41 @@ class MainWindow(Gtk.ApplicationWindow):
         dialog.show()
 
     def start_server(self):
-        # Crear un LinkButton para abrir el servidor en el navegador
-        from gi.repository import Gtk
+        # Crear o reutilizar un botón para abrir el servidor en el navegador
+        from gi.repository import Gtk, Gio, GLib
+        import subprocess
         
         # Obtener el puerto configurado
         port = int(self.port_entry.get_text()) if self.port_entry.get_text() else 8080
         
-        # Crear el widget del enlace
+        # Actualizar la URL del servidor
         self.link_url = f"http://localhost:{port}"
-        self.link_widget = Gtk.LinkButton(uri=self.link_url, label=f"Abrir en navegador ({self.link_url})")
+        
+        # Función para abrir el navegador cuando se hace clic en el botón
+        def on_open_browser_clicked(button):
+            try:
+                # Intentar abrir el navegador usando xdg-open en Linux
+                subprocess.Popen(["xdg-open", self.link_url])
+            except Exception as e:
+                print(f"Error al abrir el navegador: {e}")
+                show_error(self, f"No se pudo abrir el navegador: {e}")
+        
+        # Verificar si ya existe el botón
+        if not hasattr(self, 'link_widget') or self.link_widget is None:
+            # Crear el botón si no existe
+            self.link_widget = Gtk.Button(label=f"Abrir en navegador ({self.link_url})")
+            
+            # Conectar la señal de clic al botón (solo una vez)
+            self.link_widget.connect("clicked", on_open_browser_clicked)
+            
+            # Añadir el widget después de la etiqueta de estado
+            self.box.insert_child_after(self.link_widget, self.status_label)
+        else:
+            # Reutilizar el botón existente
+            self.link_widget.set_label(f"Abrir en navegador ({self.link_url})")
+        
+        # Asegurarse de que el botón esté habilitado
         self.link_widget.set_sensitive(True)
-        
-        # Añadir el widget después de la etiqueta de estado
-        status_idx = 0
-        child = self.box.get_first_child()
-        while child:
-            if child == self.status_label:
-                break
-            child = child.get_next_sibling()
-            status_idx += 1
-        
-        # Insertar después de la etiqueta de estado
-        self.box.insert_child_after(self.link_widget, self.status_label)
 
         try:
             self.status_label.set_label("Iniciando servidor...")
@@ -292,10 +305,9 @@ class MainWindow(Gtk.ApplicationWindow):
                     return False  # Operación cancelada por el usuario
             # --- Fin comprobación de servidor activo ---
             # Obtención completa de parámetros desde los widgets
-            # Construir la ruta absoluta al modelo seleccionado
-            model_name = self.model_choice.get_selected_item().get_string() if self.model_choice.get_selected_item() else ""
+            # Obtener la ruta absoluta al modelo seleccionado usando la función especializada
             models_dir = self.models_dir_entry.get_text()
-            model_path = os.path.join(models_dir, model_name) if model_name else ""
+            model_path = get_selected_model_path(self.model_choice, models_dir)
             ngl = int(self.ngl_entry.get_text()) if hasattr(self, 'ngl_entry') else 0
             bin_base = self.bin_dir_entry.get_text()
             port = self.port_entry.get_text()
@@ -400,10 +412,10 @@ class MainWindow(Gtk.ApplicationWindow):
             output_thread = threading.Thread(target=read_output)
             output_thread.daemon = True  # El hilo se cerrará cuando el programa principal termine
             output_thread.start()
-            # Mostrar link y mensaje claro
+            # Mostrar mensaje claro y actualizar botón
             url = f"http://localhost:{port}"
             self.status_label.set_label(f"Servidor iniciado correctamente. Accede en: {url}")
-            self.link_widget.set_uri(url)
+            self.link_url = url  # Actualizar la URL por si cambió el puerto
             self.link_widget.set_label(f"Abrir en navegador ({url})")
             self.link_widget.set_sensitive(True)
             logging.getLogger(__name__).info("Servidor iniciado")
@@ -415,32 +427,16 @@ class MainWindow(Gtk.ApplicationWindow):
             return False  # Error al iniciar el servidor
 
     def stop_server(self):
-        # Eliminar el LinkButton cuando el servidor se detiene
+        # Deshabilitar el botón del navegador cuando el servidor se detiene
         from gi.repository import Gtk
         if hasattr(self, 'link_widget') and self.link_widget is not None:
-            # Eliminar el widget del enlace
-            try:
-                self.box.remove(self.link_widget)
-            except Exception as e:
-                print(f"Error al eliminar link_widget: {e}")
-            
-            # Establecer a None para liberar memoria
-            self.link_widget = None
-            
-            # Solicitar que la ventana ajuste su tamaño
-            self.queue_resize()
+            # Deshabilitar el botón en lugar de eliminarlo
+            self.link_widget.set_sensitive(False)
+            # Cambiar el texto para indicar que el servidor está detenido
+            self.link_widget.set_label("Servidor detenido - No disponible")
 
         # Actualizar la interfaz para mostrar el estado
         self.status_label.set_label("Deteniendo servidor...")
-            
-        # Primero, eliminar el enlace si existe para evitar duplicar intentos de eliminación
-        if hasattr(self, 'link_widget') and self.link_widget is not None:
-            try:
-                self.box.remove(self.link_widget)
-                self.link_widget = None
-                self.queue_resize()  # Ajustar tamaño de ventana
-            except Exception as e:
-                print(f"Error al eliminar link_widget: {e}")
         
         # Verificar si hay un proceso activo para detener
         if self.process is not None:
