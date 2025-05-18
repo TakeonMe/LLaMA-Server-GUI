@@ -368,7 +368,7 @@ class MainWindow(Gtk.ApplicationWindow):
             self.status_label.set_label("Modelos actualizados para la ruta seleccionada.")
 
     def on_select_folder_clicked(self, button):
-        dialog = Gtk.FileChooserNative(
+        self.folder_dialog = Gtk.FileChooserNative(
             title="Selecciona la carpeta de modelos GGUF",
             action=Gtk.FileChooserAction.SELECT_FOLDER,
             modal=True
@@ -378,8 +378,9 @@ class MainWindow(Gtk.ApplicationWindow):
                 folder = native.get_file().get_path()
                 self.models_dir_entry.set_text(folder)
             native.destroy()
-        dialog.connect("response", on_response)
-        dialog.show()
+            self.folder_dialog = None  # Libera la referencia cuando termine
+        self.folder_dialog.connect("response", on_response)
+        self.folder_dialog.show()
 
     def start_server(self):
         # Crear o reutilizar un botón para abrir el servidor en el navegador
