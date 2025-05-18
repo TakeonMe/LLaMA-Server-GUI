@@ -3,7 +3,8 @@ import os
 import logging
 import json
 
-CONFIG_FILE = ".llama-server-config.json"
+# Guardar la configuración siempre en ~/.llama-server-gui/.llama-server-config.json
+CONFIG_FILE = os.path.expanduser("~/.llama-server-gui/.llama-server-config.json")
 
 DEFAULT_CONFIG = {
     "models_dir": "",
@@ -17,10 +18,12 @@ DEFAULT_CONFIG = {
     "repeat_penalty": "1.1",
     "threads": str(os.cpu_count() or 4),
     "ctx_size": "4096",
-    "max_tokens": "512"
+    "max_tokens": "512",
+    "language": "en",  # Idioma por defecto: inglés
+    "theme": "system"  # Tema por defecto: sistema
 }
 
-def save_config(models_dir, bin_base, ngl, port, prompt, temp, top_k, top_p, repeat_penalty, threads, ctx_size, max_tokens):
+def save_config(models_dir, bin_base, ngl, port, prompt, temp, top_k, top_p, repeat_penalty, threads, ctx_size, max_tokens, language="es", theme="system"):
     config = {
         "models_dir": models_dir,
         "bin_base": bin_base,
@@ -33,7 +36,9 @@ def save_config(models_dir, bin_base, ngl, port, prompt, temp, top_k, top_p, rep
         "repeat_penalty": repeat_penalty,
         "threads": threads,
         "ctx_size": ctx_size,
-        "max_tokens": max_tokens
+        "max_tokens": max_tokens,
+        "language": language,
+        "theme": theme
     }
     try:
         with open(CONFIG_FILE, "w") as f:

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=LLaMA Server GUI
+Exec=/home/pedro/CloudCenter/MegaSync/LLaMA-Server-GUI/venv/bin/python3 /home/pedro/CloudCenter/MegaSync/LLaMA-Server-GUI/gtk_llama_gui.py
+Icon=/home/pedro/CloudCenter/MegaSync/LLaMA-Server-GUI/assets/llama-server-gui.svg
+Terminal=false
+Categories=Utility;Development;

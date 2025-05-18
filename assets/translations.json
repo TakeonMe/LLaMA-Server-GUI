@@ -1,0 +1,389 @@
+{
+  "app_title": {
+    "es": "Servidor LLaMA",
+    "en": "LLaMA Server",
+    "pt": "Servidor LLaMA",
+    "it": "Server LLaMA",
+    "de": "LLaMA Server",
+    "zh": "LLaMA 服务器",
+    "ja": "LLaMA サーバー"
+  },
+  "models_dir_placeholder": {
+    "es": "Ruta a modelos GGUF (ej. /media/user/models)",
+    "en": "Path to GGUF models (e.g. /media/user/models)",
+    "pt": "Caminho para modelos GGUF (ex. /media/user/models)",
+    "it": "Percorso dei modelli GGUF (es. /media/user/models)",
+    "de": "Pfad zu GGUF-Modellen (z.B. /media/user/models)",
+    "zh": "GGUF 模型路径 (例如 /media/user/models)",
+    "ja": "GGUF モデルへのパス (例: /media/user/models)"
+  },
+  "select_folder_button": {
+    "es": "Seleccionar carpeta",
+    "en": "Select folder",
+    "pt": "Selecionar pasta",
+    "it": "Seleziona cartella",
+    "de": "Ordner auswählen",
+    "zh": "选择文件夹",
+    "ja": "フォルダを選択"
+  },
+  "bin_dir_placeholder": {
+    "es": "Ruta base a llama.cpp (ej. /media/user/llama.cpp)",
+    "en": "Base path to llama.cpp (e.g. /media/user/llama.cpp)",
+    "pt": "Caminho base para llama.cpp (ex. /media/user/llama.cpp)",
+    "it": "Percorso base per llama.cpp (es. /media/user/llama.cpp)",
+    "de": "Basispfad zu llama.cpp (z.B. /media/user/llama.cpp)",
+    "zh": "llama.cpp 基本路径 (例如 /media/user/llama.cpp)",
+    "ja": "llama.cpp へのベースパス (例: /media/user/llama.cpp)"
+  },
+  "ngl_placeholder": {
+    "es": "Capas GPU (ej. 40)",
+    "en": "GPU layers (e.g. 40)",
+    "pt": "Camadas GPU (ex. 40)",
+    "it": "Livelli GPU (es. 40)",
+    "de": "GPU-Schichten (z.B. 40)",
+    "zh": "GPU 层 (例如 40)",
+    "ja": "GPU レイヤー (例: 40)"
+  },
+  "port_placeholder": {
+    "es": "Puerto (ej. 8080)",
+    "en": "Port (e.g. 8080)",
+    "pt": "Porta (ex. 8080)",
+    "it": "Porta (es. 8080)",
+    "de": "Port (z.B. 8080)",
+    "zh": "端口 (例如 8080)",
+    "ja": "ポート (例: 8080)"
+  },
+  "prompt_placeholder": {
+    "es": "Prompt inicial",
+    "en": "Initial prompt",
+    "pt": "Prompt inicial",
+    "it": "Prompt iniziale",
+    "de": "Anfangsprompt",
+    "zh": "初始提示词",
+    "ja": "初期プロンプト"
+  },
+  "temp_placeholder": {
+    "es": "Temp (ej. 0.8)",
+    "en": "Temp (e.g. 0.8)",
+    "pt": "Temp (ex. 0.8)",
+    "it": "Temp (es. 0.8)",
+    "de": "Temp (z.B. 0.8)",
+    "zh": "温度 (例如 0.8)",
+    "ja": "温度 (例: 0.8)"
+  },
+  "top_k_placeholder": {
+    "es": "Top-K (ej. 40)",
+    "en": "Top-K (e.g. 40)",
+    "pt": "Top-K (ex. 40)",
+    "it": "Top-K (es. 40)",
+    "de": "Top-K (z.B. 40)",
+    "zh": "Top-K (例如 40)",
+    "ja": "Top-K (例: 40)"
+  },
+  "top_p_placeholder": {
+    "es": "Top-P (ej. 0.95)",
+    "en": "Top-P (e.g. 0.95)",
+    "pt": "Top-P (ex. 0.95)",
+    "it": "Top-P (es. 0.95)",
+    "de": "Top-P (z.B. 0.95)",
+    "zh": "Top-P (例如 0.95)",
+    "ja": "Top-P (例: 0.95)"
+  },
+  "repeat_penalty_placeholder": {
+    "es": "Repeat Penalty (ej. 1.1)",
+    "en": "Repeat Penalty (e.g. 1.1)",
+    "pt": "Penalidade de Repetição (ex. 1.1)",
+    "it": "Penalità di Ripetizione (es. 1.1)",
+    "de": "Wiederholungsstrafe (z.B. 1.1)",
+    "zh": "重复惩罚 (例如 1.1)",
+    "ja": "繰り返しペナルティ (例: 1.1)"
+  },
+  "threads_placeholder": {
+    "es": "Threads (ej. 8)",
+    "en": "Threads (e.g. 8)",
+    "pt": "Threads (ex. 8)",
+    "it": "Thread (es. 8)",
+    "de": "Threads (z.B. 8)",
+    "zh": "线程 (例如 8)",
+    "ja": "スレッド (例: 8)"
+  },
+  "ctx_size_placeholder": {
+    "es": "Context Size (ej. 2048)",
+    "en": "Context Size (e.g. 2048)",
+    "pt": "Tamanho do Contexto (ex. 2048)",
+    "it": "Dimensione del Contesto (es. 2048)",
+    "de": "Kontextgröße (z.B. 2048)",
+    "zh": "上下文大小 (例如 2048)",
+    "ja": "コンテキストサイズ (例: 2048)"
+  },
+  "max_tokens_placeholder": {
+    "es": "Max Tokens (ej. 128)",
+    "en": "Max Tokens (e.g. 128)",
+    "pt": "Máx. Tokens (ex. 128)",
+    "it": "Max Token (es. 128)",
+    "de": "Max. Tokens (z.B. 128)",
+    "zh": "最大标记数 (例如 128)",
+    "ja": "最大トークン数 (例: 128)"
+  },
+  "start_button": {
+    "es": "Iniciar Servidor",
+    "en": "Start Server",
+    "pt": "Iniciar Servidor",
+    "it": "Avvia Server",
+    "de": "Server starten",
+    "zh": "启动服务器",
+    "ja": "サーバーを起動"
+  },
+  "stop_button": {
+    "es": "Detener Servidor",
+    "en": "Stop Server",
+    "pt": "Parar Servidor",
+    "it": "Ferma Server",
+    "de": "Server stoppen",
+    "zh": "停止服务器",
+    "ja": "サーバーを停止"
+  },
+  "status_initial": {
+    "es": "Completa los campos y pulsa 'Iniciar Servidor'.",
+    "en": "Fill in the fields and press 'Start Server'.",
+    "pt": "Preencha os campos e pressione 'Iniciar Servidor'.",
+    "it": "Compila i campi e premi 'Avvia Server'.",
+    "de": "Fülle die Felder aus und drücke 'Server starten'.",
+    "zh": "填写字段并点击'启动服务器'.",
+    "ja": "フィールドに入力して'サーバーを起動'を押してください."
+  },
+  "status_models_loaded": {
+    "es": "Modelos GGUF cargados correctamente.",
+    "en": "GGUF models loaded successfully.",
+    "pt": "Modelos GGUF carregados com sucesso.",
+    "it": "Modelli GGUF caricati con successo.",
+    "de": "GGUF-Modelle erfolgreich geladen.",
+    "zh": "GGUF 模型加载成功。",
+    "ja": "GGUF モデルが正常に読み込まれました。"
+  },
+  "status_no_models": {
+    "es": "⚠️ No se encontraron modelos GGUF en la carpeta configurada.",
+    "en": "⚠️ No GGUF models found in the configured folder.",
+    "pt": "⚠️ Nenhum modelo GGUF encontrado na pasta configurada.",
+    "it": "⚠️ Nessun modello GGUF trovato nella cartella configurata.",
+    "de": "⚠️ Keine GGUF-Modelle im konfigurierten Ordner gefunden.",
+    "zh": "⚠️ 在配置的文件夹中未找到 GGUF 模型。",
+    "ja": "⚠️ 設定されたフォルダにGGUFモデルが見つかりません。"
+  },
+  "status_server_starting": {
+    "es": "Iniciando servidor...",
+    "en": "Starting server...",
+    "pt": "Iniciando servidor...",
+    "it": "Avvio del server...",
+    "de": "Server wird gestartet...",
+    "zh": "正在启动服务器...",
+    "ja": "サーバーを起動中..."
+  },
+  "status_server_started": {
+    "es": "Servidor iniciado en http://localhost:{0}",
+    "en": "Server started at http://localhost:{0}",
+    "pt": "Servidor iniciado em http://localhost:{0}",
+    "it": "Server avviato su http://localhost:{0}",
+    "de": "Server gestartet auf http://localhost:{0}",
+    "zh": "服务器已在 http://localhost:{0} 启动",
+    "ja": "サーバーが http://localhost:{0} で起動しました"
+  },
+  "status_server_stopped": {
+    "es": "Servidor detenido.",
+    "en": "Server stopped.",
+    "pt": "Servidor parado.",
+    "it": "Server fermato.",
+    "de": "Server gestoppt.",
+    "zh": "服务器已停止。",
+    "ja": "サーバーが停止しました。"
+  },
+  "error_prefix": {
+    "es": "Error: {0}",
+    "en": "Error: {0}",
+    "pt": "Erro: {0}",
+    "it": "Errore: {0}",
+    "de": "Fehler: {0}",
+    "zh": "错误：{0}",
+    "ja": "エラー：{0}"
+  },
+  "error_no_model": {
+    "es": "No se ha seleccionado ningún modelo.",
+    "en": "No model selected.",
+    "pt": "Nenhum modelo selecionado.",
+    "it": "Nessun modello selezionato.",
+    "de": "Kein Modell ausgewählt.",
+    "zh": "未选择模型。",
+    "ja": "モデルが選択されていません。"
+  },
+  "error_no_bin_dir": {
+    "es": "La ruta base a llama.cpp no está configurada.",
+    "en": "The base path to llama.cpp is not configured.",
+    "pt": "O caminho base para llama.cpp não está configurado.",
+    "it": "Il percorso base per llama.cpp non è configurato.",
+    "de": "Der Basispfad zu llama.cpp ist nicht konfiguriert.",
+    "zh": "llama.cpp 的基本路径未配置。",
+    "ja": "llama.cpp へのベースパスが設定されていません。"
+  },
+  "error_invalid_port": {
+    "es": "Puerto inválido. Debe ser un número entre 1024 y 65535.",
+    "en": "Invalid port. Must be a number between 1024 and 65535.",
+    "pt": "Porta inválida. Deve ser um número entre 1024 e 65535.",
+    "it": "Porta non valida. Deve essere un numero tra 1024 e 65535.",
+    "de": "Ungültiger Port. Muss eine Zahl zwischen 1024 und 65535 sein.",
+    "zh": "端口无效。必须是 1024 和 65535 之间的数字。",
+    "ja": "無効なポートです。 1024 から 65535 の間の数字でなければなりません。"
+  },
+  "error_server_start": {
+    "es": "Error al iniciar el servidor: {0}",
+    "en": "Error starting server: {0}",
+    "pt": "Erro ao iniciar o servidor: {0}",
+    "it": "Errore durante l'avvio del server: {0}",
+    "de": "Fehler beim Starten des Servers: {0}",
+    "zh": "启动服务器时出错：{0}",
+    "ja": "サーバーの起動中にエラーが発生しました：{0}"
+  },
+  "language_selector": {
+    "es": "Idioma",
+    "en": "Language",
+    "pt": "Idioma",
+    "it": "Lingua",
+    "de": "Sprache",
+    "zh": "语言",
+    "ja": "言語"
+  },
+  "language_es": {
+    "es": "Español",
+    "en": "Spanish",
+    "pt": "Espanhol",
+    "it": "Spagnolo",
+    "de": "Spanisch",
+    "zh": "西班牙语",
+    "ja": "スペイン語"
+  },
+  "language_en": {
+    "es": "Inglés",
+    "en": "English",
+    "pt": "Inglês",
+    "it": "Inglese",
+    "de": "Englisch",
+    "zh": "英语",
+    "ja": "英語"
+  },
+  "language_pt": {
+    "es": "Portugués",
+    "en": "Portuguese",
+    "pt": "Português",
+    "it": "Portoghese",
+    "de": "Portugiesisch",
+    "zh": "葡萄牙语",
+    "ja": "ポルトガル語"
+  },
+  "language_it": {
+    "es": "Italiano",
+    "en": "Italian",
+    "pt": "Italiano",
+    "it": "Italiano",
+    "de": "Italienisch",
+    "zh": "意大利语",
+    "ja": "イタリア語"
+  },
+  "language_de": {
+    "es": "Alemán",
+    "en": "German",
+    "pt": "Alemão",
+    "it": "Tedesco",
+    "de": "Deutsch",
+    "zh": "德语",
+    "ja": "ドイツ語"
+  },
+  "language_zh": {
+    "es": "Chino",
+    "en": "Chinese",
+    "pt": "Chinês",
+    "it": "Cinese",
+    "de": "Chinesisch",
+    "zh": "中文",
+    "ja": "中国語"
+  },
+  "language_ja": {
+    "es": "Japonés",
+    "en": "Japanese",
+    "pt": "Japonês",
+    "it": "Giapponese",
+    "de": "Japanisch",
+    "zh": "日语",
+    "ja": "日本語"
+  },
+  "theme_selector": {
+    "es": "Tema",
+    "en": "Theme",
+    "pt": "Tema",
+    "it": "Tema",
+    "de": "Thema",
+    "zh": "主题",
+    "ja": "テーマ"
+  },
+  "theme_light": {
+    "es": "Claro",
+    "en": "Light",
+    "pt": "Claro",
+    "it": "Chiaro",
+    "de": "Hell",
+    "zh": "亮色",
+    "ja": "ライト"
+  },
+  "theme_dark": {
+    "es": "Oscuro",
+    "en": "Dark",
+    "pt": "Escuro",
+    "it": "Scuro",
+    "de": "Dunkel",
+    "zh": "暗色",
+    "ja": "ダーク"
+  },
+  "theme_system": {
+    "es": "Sistema",
+    "en": "System",
+    "pt": "Sistema",
+    "it": "Sistema",
+    "de": "System",
+    "zh": "系统",
+    "ja": "システム"
+  },
+  "select_theme": {
+    "es": "Seleccionar tema",
+    "en": "Select theme",
+    "pt": "Selecionar tema",
+    "it": "Seleziona tema",
+    "de": "Thema auswählen",
+    "zh": "选择主题",
+    "ja": "テーマを選択"
+  },
+  "file_size_gb": {
+    "es": "{0:.1f} GB",
+    "en": "{0:.1f} GB",
+    "pt": "{0:.1f} GB",
+    "it": "{0:.1f} GB",
+    "de": "{0:.1f} GB",
+    "zh": "{0:.1f} GB",
+    "ja": "{0:.1f} GB"
+  },
+  "file_size_mb": {
+    "es": "{0:.1f} MB",
+    "en": "{0:.1f} MB",
+    "pt": "{0:.1f} MB",
+    "it": "{0:.1f} MB",
+    "de": "{0:.1f} MB",
+    "zh": "{0:.1f} MB",
+    "ja": "{0:.1f} MB"
+  },
+  "model_size_format": {
+    "es": "({0}) - {1}",
+    "en": "({0}) - {1}",
+    "pt": "({0}) - {1}",
+    "it": "({0}) - {1}",
+    "de": "({0}) - {1}",
+    "zh": "({0}) - {1}",
+    "ja": "({0}) - {1}"
+  }
+}
