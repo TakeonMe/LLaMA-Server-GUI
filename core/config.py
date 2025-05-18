@@ -16,7 +16,7 @@ DEFAULT_CONFIG = {
     "top_k": "40",
     "top_p": "0.9",
     "repeat_penalty": "1.1",
-    "threads": str(os.cpu_count() or 4),
+    "threads": str(int(os.cpu_count() / 2 or 4)),
     "ctx_size": "4096",
     "max_tokens": "512",
     "language": "en",  # Idioma por defecto: inglés

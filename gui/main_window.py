@@ -363,7 +363,7 @@ class MainWindow(Gtk.ApplicationWindow):
             return
         update_model_list(entry, self.model_choice)
         if self.model_choice.get_model().get_n_items() == 0:
-            self.status_label.set_label("⚠️ No se encontraron modelos GGUF en la carpeta seleccionada.")
+            self.status_label.set_label("⚠️ No hay modelos GGUF en la carpeta configurada.")
         else:
             self.status_label.set_label("Modelos actualizados para la ruta seleccionada.")
 

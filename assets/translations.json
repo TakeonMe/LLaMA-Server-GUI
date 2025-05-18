@@ -162,7 +162,7 @@
     "ja": "GGUF モデルが正常に読み込まれました。"
   },
   "status_no_models": {
-    "es": "⚠️ No se encontraron modelos GGUF en la carpeta configurada.",
+    "es": "⚠️ No hay modelos GGUF en la carpeta configurada.",
     "en": "⚠️ No GGUF models found in the configured folder.",
     "pt": "⚠️ Nenhum modelo GGUF encontrado na pasta configurada.",
     "it": "⚠️ Nessun modello GGUF trovato nella cartella configurata.",
