@@ -2,6 +2,13 @@
 
 Interfaz gráfica en GTK para gestionar servidores LLaMA en Linux, con soporte para modelos GGUF.
 
+## Captura de pantalla
+Aquí puedes ver cómo se ve la interfaz de LLaMA Server GUI al iniciarla:
+
+<div align="center">
+  <img src="assets/screenshot.gif" alt="Captura de pantalla de LLaMA Server GUI">
+</div>
+
 ## Requisitos y dependencias / Requirements and dependencies
 
 ### Español
@@ -67,10 +74,3 @@ With all dependencies installed and the virtual environment activated, run the a
 ```bash
 python3 gtk_llama_gui.py
 ```
-
-## Captura de pantalla
-Aquí puedes ver cómo se ve la interfaz de LLaMA Server GUI al iniciarla:
-
-<div align="center">
-  <img src="assets/screenshot.gif" alt="Captura de pantalla de LLaMA Server GUI">
-</div>
